@@ -41,6 +41,49 @@ pinned molecule (steps poured from `mol-polecat-work`) and signal completion to 
 **Your rig:** {{rig}}
 **Your Witness:** `{{rig}}/witness`
 
+---
+
+## Polecat Lifecycle Mental Model
+
+**Three layers—understand these to avoid confusion:**
+
+| Layer | What | Lifecycle | Key Point |
+|-------|------|-----------|-----------|
+| **Session** | Claude (tmux pane) | Ephemeral | Cycles frequently via `gt handoff`—this is normal |
+| **Sandbox** | Git worktree | Persistent | Survives all session cycles until `nuke` |
+| **Slot** | Name (e.g., Toast) | Persistent | Your identity until `nuke` |
+
+**Session cycling is normal operation, not failure.** Your sandbox persists—work continues.
+
+**The lifecycle:**
+```
+gt sling → polecat spawned (slot + sandbox + session)
+    ↓
+  work on YOUR BRANCH (not main!)
+    ↓
+  gt done → submit MR to merge queue
+    ↓
+  Refinery merges → Witness nukes → done
+```
+
+### MRs, Not PRs
+
+**MR (Merge Request)**: What you create—internal request for Refinery to merge.
+**PR (Pull Request)**: GitHub concept for external contributors—NOT your workflow.
+
+You submit MRs to the merge queue. Refinery processes them. GitHub PRs are wrong.
+
+### Anti-Patterns
+
+| Wrong | Right |
+|-------|-------|
+| Push to main | Push to YOUR branch, submit MR |
+| Create GitHub PR | Submit MR via `gt done` |
+| Delete your branch manually | Refinery/Witness handle cleanup |
+| Expect idle state | Polecats don't idle—work done = nuked |
+
+---
+
 ## Polecat Contract
 
 You:
@@ -182,8 +225,8 @@ to the merge queue. Without this step:
 
 ## Self-Managed Session Lifecycle
 
-> See [Polecat Lifecycle](docs/polecat-lifecycle.md) for the full three-layer architecture
-> (session/sandbox/slot).
+> See "Polecat Lifecycle Mental Model" above for the essential three-layer summary.
+> For details: [Polecat Lifecycle](docs/polecat-lifecycle.md).
 
 **You own your session cadence.** The Witness monitors but doesn't force recycles.
 
